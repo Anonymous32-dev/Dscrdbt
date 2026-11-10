@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "lib": ["dom", "dom.iterable", "es6"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolutionStrategy": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "declaration": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "jsx": "preserve",
+    "types": ["@types/node", "@types/react", "@types/react-dom"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}

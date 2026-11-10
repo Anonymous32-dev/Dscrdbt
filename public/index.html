@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Bot Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide-react@latest/dist/umd/lucide-react.js"></script>
+    <script src="https://unpkg.com/framer-motion@latest/dist/framer-motion.js"></script>
+    <script>
+        tailwindcss.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        border: "hsl(var(--border))",
+                        input: "hsl(var(--input))",
+                        ring: "hsl(var(--ring))",
+                        background: "hsl(var(--background))",
+                        foreground: "hsl(var(--foreground))",
+                        primary: {
+                            DEFAULT: "hsl(var(--primary))",
+                            foreground: "hsl(var(--primary-foreground))",
+                        },
+                        secondary: {
+                            DEFAULT: "hsl(var(--secondary))",
+                            foreground: "hsl(var(--secondary-foreground))",
+                        },
+                        destructive: {
+                            DEFAULT: "hsl(var(--destructive))",
+                            foreground: "hsl(var(--destructive-foreground))",
+                        },
+                        muted: {
+                            DEFAULT: "hsl(var(--muted))",
+                            foreground: "hsl(var(--muted-foreground))",
+                        },
+                        accent: {
+                            DEFAULT: "hsl(var(--accent))",
+                            foreground: "hsl(var(--accent-foreground))",
+                        },
+                        popover: {
+                            DEFAULT: "hsl(var(--popover))",
+                            foreground: "hsl(var(--popover-foreground))",
+                        },
+                        card: {
+                            DEFAULT: "hsl(var(--card))",
+                            foreground: "hsl(var(--card-foreground))",
+                        },
+                        border: "hsl(var(--border))",
+                        input: "hsl(var(--input))",
+                        ring: "hsl(var(--ring))",
+                        slate: {
+                            50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1',
+                            400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155',
+                            800: '#1e293b', 900: '#0f172a', 950: '#0B0E14',
+                        },
+                    },
+                    borderRadius: {
+                        lg: 'var(--radius)',
+                        md: 'calc(var(--radius) - 2px)',
+                        sm: 'calc(var(--radius) - 4px)',
+                    },
+                    keyframes: {
+                        "accordion-down": {
+                            from: { height: "0" },
+                            to: { height: "var(--radix-accordion-content-height)" },
+                        },
+                        "accordion-up": {
+                            from: { height: "var(--radix-accordion-content-height)" },
+                            to: { height: "0" },
+                        },
+                    },
+                    animation: {
+                        "accordion-down": "accordion-down 0.2s ease-out",
+                        "accordion-up": "accordion-up 0.2s ease-out",
+                    },
+                },
+            },
+            plugins: [],
+        };
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --background: 222.2 84% 4.9%;
+            --foreground: 210 40% 98%;
+            --card: 222.2 84% 4.9%;
+            --card-foreground: 210 40% 98%;
+            --popover: 222.2 84% 4.9%;
+            --popover-foreground: 210 40% 98%;
+            --primary: 210 40% 98%;
+            --primary-foreground: 222.2 47.4% 11.2%;
+            --secondary: 217.2 32.6% 17.5%;
+            --secondary-foreground: 210 40% 98%;
+            --muted: 217.2 32.6% 17.5%;
+            --muted-foreground: 215 20.2% 65.1%;
+            --accent: 217.2 32.6% 17.5%;
+            --accent-foreground: 210 40% 98%;
+            --destructive: 0 62.8% 30.6%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 217.2 32.6% 17.5%;
+            --input: 217.2 32.6% 17.5%;
+            --ring: 212.7 26.8% 83.9%;
+            --radius: 0.5rem;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0B0E14;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        .glassmorphism {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #8B5CF6, #06B6D4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .animate-pulse-slow {
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="module">
+        // Import React and React DOM
+        import React from 'https://esm.run/react';
+        import ReactDOM from 'https://esm.run/react-dom/client';
+        
+        // Import our components
+        import Layout from './src/app/layout.tsx';
+        import Dashboard from './src/app/page.tsx';
+        import CommandControl from './src/components/command-control.tsx';
+        import UserProfile from './src/components/user-profile.tsx';
+        import Analytics from './src/components/analytics.tsx';
+        import Settings from './src/components/settings.tsx';
+        
+        // Create root element
+        const rootElement = document.getElementById('root');
+        const root = ReactDOM.createRoot(rootElement);
+        
+        // Create API service for the dashboard
+        const apiService = {
+            async getBotStatus() {
+                const response = await fetch('/api/bot/status');
+                return response.json();
+            },
+            async getCommands() {
+                const response = await fetch('/api/commands');
+                return response.json();
+            },
+            async getUsers() {
+                const response = await fetch('/api/users');
+                return response.json();
+            }
+        };
+        
+        // Navigation component
+        function Navigation() {
+            const [currentPage, setCurrentPage] = React.useState('dashboard');
+            
+            const pages = [
+                { id: 'dashboard', label: 'Dashboard', icon: '🏠' },
+                { id: 'commands', label: 'Commands', icon: '⚡' },
+                { id: 'profiles', label: 'Profiles', icon: '👤' },
+                { id: 'analytics', label: 'Analytics', icon: '📊' },
+                { id: 'settings', label: 'Settings', icon: '⚙️' }
+            ];
+            
+            return (
+                <nav className="bg-slate-900 border-r border-white/10 p-4">
+                    <div className="space-y-2">
+                        {pages.map(page => (
+                            <button
+                                key={page.id}
+                                onClick={() => setCurrentPage(page.id)}
+                                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all ${currentPage === page.id
+                                    ? 'bg-gradient-to-r from-purple-500/20 to-cyan-500/20 text-white border border-purple-500/30'
+                                    : 'text-gray-300 hover:bg-white/10'
+                                }`}
+                            >
+                                <span className="text-xl">{page.icon}</span>
+                                <span className="font-medium">{page.label}</span>
+                            </button>
+                        ))}
+                    </div>
+                </nav>
+            );
+        }
+        
+        // Main app component
+        function App() {
+            const [botStatus, setBotStatus] = React.useState('online');
+            const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+            const [apiData, setApiData] = React.useState({});
+            
+            React.useEffect(() => {
+                apiService.getBotStatus().then(data => setApiData(prev => ({ ...prev, botStatus: data })));
+                apiService.getCommands().then(data => setApiData(prev => ({ ...prev, commands: data })));
+                apiService.getUsers().then(data => setApiData(prev => ({ ...prev, users: data })));
+                
+                const interval = setInterval(() => {
+                    apiService.getBotStatus().then(data => setApiData(prev => ({ ...prev, botStatus: data })));
+                }, 5000);
+                
+                return () => clearInterval(interval);
+            }, []);
+            
+            const renderPage = () => {
+                switch(currentPage) {
+                    case 'dashboard':
+                        return <Dashboard />;
+                    case 'commands':
+                        return <CommandControl />;
+                    case 'profiles':
+                        return <UserProfile />;
+                    case 'analytics':
+                        return <Analytics />;
+                    case 'settings':
+                        return <Settings />;
+                    default:
+                        return <Dashboard />;
+                }
+            };
+            
+            return (
+                <div className="min-h-screen bg-slate-950 text-white overflow-hidden">
+                    <div className="flex">
+                        <button
+                            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                            className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-slate-900 border border-white/10"
+                        >
+                            <span className="text-xl">☰</span>
+                        </button>
+                        
+                        <div className={`fixed left-0 top-0 h-full w-72 bg-slate-900 border-r border-white/10 p-6 transform transition-transform duration-300 lg:translate-x-0 z-40 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}` }
+                        }
+                        >
+                            <Navigation setCurrentPage={setCurrentPage} currentPage={currentPage} />
+                        </div>
+                        
+                        {isSidebarOpen && (
+                            <div
+                                onClick={() => setIsSidebarOpen(false)}
+                                className="lg:hidden fixed inset-0 bg-black/50 z-30"
+                            />
+                        )}
+                        
+                        <main className="flex-1 lg:ml-72 transition-all duration-300 p-6">
+                            {renderPage()}
+                        </main>
+                    </div>
+                </div>
+            );
+        }
+        
+        // Router for page switching
+        function Router() {
+            const [currentPage, setCurrentPage] = React.useState('dashboard');
+            
+            React.useEffect(() => {
+                const path = window.location.pathname;
+                if (path.startsWith('/commands')) setCurrentPage('commands');
+                else if (path.startsWith('/profiles')) setCurrentPage('profiles');
+                else if (path.startsWith('/analytics')) setCurrentPage('analytics');
+                else if (path.startsWith('/settings')) setCurrentPage('settings');
+                else setCurrentPage('dashboard');
+                
+                const handlePopState = () => {
+                    const path = window.location.pathname;
+                    if (path.startsWith('/commands')) setCurrentPage('commands');
+                    else if (path.startsWith('/profiles')) setCurrentPage('profiles');
+                    else if (path.startsWith('/analytics')) setCurrentPage('analytics');
+                    else if (path.startsWith('/settings')) setCurrentPage('settings');
+                    else setCurrentPage('dashboard');
+                };
+                
+                window.addEventListener('popstate', handlePopState);
+                return () => window.removeEventListener('popstate', handlePopState);
+            }, []);
+            
+            const handleNavigation = (page) => {
+                setCurrentPage(page);
+                window.history.pushState({}, '', `/${page === 'dashboard' ? '' : page}`);
+            };
+            
+            return { currentPage, handleNavigation };
+        }
+        
+        // Wrap all components with AppProvider
+        function AppWrapper() {
+            const router = Router();
+            
+            return (
+                <AppContext.Provider value={{ ...router }}>
+                    <App />
+                </AppContext.Provider>
+            );
+        }
+        
+        // Create AppContext
+        const AppContext = React.createContext();
+        
+        // Render the app
+        root.render(<AppWrapper />);
+        
+        // Make lucide icons available globally
+        window.lucide = {
+            createIcons: () => {
+                lucideIcons();
+            }
+        };
+        
+        // Initialize lucide icons
+        function lucideIcons() {
+            document.querySelectorAll('[data-lucide]').forEach(el => {
+                const iconName = el.getAttribute('data-lucide');
+                const iconHtml = lucideReact.createElement(iconName);
+                el.innerHTML = iconHtml;
+            });
+        }
+    </script>
+</body>
+</html>
